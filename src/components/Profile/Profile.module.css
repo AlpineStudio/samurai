@@ -1,0 +1,5 @@
+.profile {
+    grid-area: m;
+    background-color: red;
+    padding: 20px;
+}
