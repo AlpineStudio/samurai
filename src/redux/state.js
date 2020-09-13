@@ -81,4 +81,3 @@ export const updateDialogMessageActionCreator = text => ({type: 'UPDATE-NEW-DIAL
 
 
 export default store
-window.store = store
