@@ -1,3 +1,7 @@
+import profileReducer from "./profileReducer"
+import dialogsReducer from "./dialogsReducer"
+import sidebarReducer from './sidebarReducer'
+
 let store = {
     _state: {
         profilePage: {
@@ -25,7 +29,7 @@ let store = {
                 {userId: 6, text: 'Тоже'},
                 {userId: 7, text: 'А у тебя'},
             ],
-            newMessageText: 'Just message text'
+            newMessageText: ''
         },
         sidebar: {
             friends: [
@@ -45,36 +49,12 @@ let store = {
         this._callSubscriber = observer
     },
     dispatch(action) { // {type: 'ADD-POST'}
-        switch(action.type) {
-            case 'ADD-POST':
-                let newPost = {id: 5, title: this._state.profilePage.newPostText, description: 'lorem custom text', likesCount: 0}
-                this._state.profilePage.posts.push(newPost)
-                this._state.profilePage.newPostText = ''
-                this._callSubscriber(this._state)
-            break;
-            case 'UPDATE-NEW-POST-TEXT':
-                this._state.profilePage.newPostText = action.postText
-                this._callSubscriber(this._state)
-            break;
-            case  'UPDATE-NEW-DIALOG-MESSAGE':
-                this._state.dialogsPage.newMessageText = action.message
-                this._callSubscriber(this._state)
-            break;
-            case 'ADD-MESSAGE':
-                const newMessage = {userId: 6, text: this._state.dialogsPage.newMessageText}
-                this._state.dialogsPage.messages.push(newMessage)
-                console.log(this._state.dialogsPage.messages)
-                this._state.dialogsPage.newMessageText = ''
-                this._callSubscriber(this._state)
-            break;
-        }
+        this._state.profilePage = profileReducer(this.getState().profilePage, action)
+        this._state.dialogsPage = dialogsReducer(this.getState().dialogsPage, action)
+        this._state.sidebar = sidebarReducer(this.getState().sidebar, action)
+        this._callSubscriber(this.getState())
     }
 }
-
-export const addPostActionCreator = () => ({type: 'ADD-POST'})
-export const updateNewPostTextActionCreator = text => ({type: 'UPDATE-NEW-POST-TEXT', postText: text})
-export const addMessageActionCreator = () => ({type: 'ADD-MESSAGE'})
-export const updateDialogMessageActionCreator = text => ({type: 'UPDATE-NEW-DIALOG-MESSAGE', message: text})
 
 // doing myself
 
